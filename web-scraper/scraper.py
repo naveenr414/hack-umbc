@@ -1,4 +1,4 @@
-#from . import populate
+from mongoscraper import populate
 from bs4 import BeautifulSoup
 import urllib.request as ur
 import json
@@ -13,7 +13,8 @@ def getData():
 
     states = list(map(lambda x: x.text.strip(),electionSoup.findAll("h2")))
     states = list(map(lambda x: x.split("-")[0],states))
-    
+
+    print(states.diff(list(set(states))))
 
     allJsons = []
     races = electionSoup.findAll("table",{"summary":"candidate"})
@@ -21,7 +22,7 @@ def getData():
         tempJson = {}
 
         state = states[raceNum]
-        tempJson["scope"] = "Senate"
+        tempJson["scope"] = "senate"
         tempJson["state"] = state
 
         
@@ -48,15 +49,12 @@ def getData():
             candidateList.append(candidateJson)                    
 
         tempJson["candidates"] = candidateList
+        populate.write(candidateList)
+        
         allJsons.append(tempJson)
-
+            
+        
     return allJsons
 
-    """
-    for each election:
-        scrape
-        populate.write(jsonFileLocation)
-    """
-    
 
 c = getData()
