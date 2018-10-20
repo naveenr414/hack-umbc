@@ -28,5 +28,22 @@ def findDistrict(address):
     
     return "No District Found"
 
-district = findDistrict("7030 Preinkert Dr, College Park, MD 20742")
+def findDistrictLat(lat,long):
+    """ Finds the congressional district for a latitude/longitude """
+
+    addy = reverseGeocode(lat,long)
+    print(addy)
+    return findDistrict(addy)
+
+def reverseGeocode(lat,long):
+    """ Return an address for a latitude longitude """
+    
+    baseURL = " https://maps.googleapis.com/maps/api/geocode/json"
+    payload = {"key":API_KEY,"latlng":str(lat)+","+str(long)}
+    r = requests.get(baseURL,params = payload)
+
+    return r.json()["results"][0]["formatted_address"]
+
+print(*latLong("7030 Preinkert Dr, College Park, MD 20742"))
+district = findDistrictLat(*latLong("7030 Preinkert Dr, College Park, MD 20742"))
 print(district)
