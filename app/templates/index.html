@@ -1,14 +1,62 @@
-{# app/templates/index.html #}
-
-<html>
+<!DOCTYPE html>
+  <html>
     <head>
-        <title>Address Page</title>
+      <!--Import Google Icon Font-->
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!--Import materialize.css-->
+      <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+
+      <style>
+         /* Set the size of the div element that contains the map */
+        #map {
+          height: 700px;  /* The height is 400 pixels */
+          width: 100%;  /* The width is the width of the web page */
+         }
+      </style>
+
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </head>
+
     <body>
-        <form action="{{ url_for('index') }}" method="post">
-            <input type="text" name="address" />
-						<input type="submit" /> 
-            {{ form.csrf_token }}
-        </form>
+      <nav>
+        <div class="nav-wrapper">
+          <a href="#" class="brand-logo center">App</a>
+        </div>
+      </nav>
+      <nav>
+        <div class="nav-wrapper">
+          <form>
+            <div class="input-field">
+              <input id="search" type="search" required>
+              <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+              <i class="material-icons">close</i>
+            </div>
+          </form>
+        </div>
+      </nav>
+      <div id="map"></div>
+
+      <!-- Modal Trigger -->
+      <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Modal</a>
+
+      <!-- Modal Structure -->
+      <div id="modal1" class="modal modal-fixed-footer">
+        <div class="modal-content">
+          {% for i in range(11) %}
+            {{ i }}
+          {% endfor %}
+        </div>
+        <div class="modal-footer">
+          <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
+        </div>
+      </div>
+
+      <!--JavaScript at end of body for optimized loading-->
+      <script type="text/javascript" src="js/materialize.min.js"></script>
+      <script type="text/javascript" src="js/app.js"></script>
+      <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCnn9Rd4-wFyh2XLLjzuADup0WOmz3_C78&callback=initMap">
+      </script>
     </body>
-</html>
+  </html>
