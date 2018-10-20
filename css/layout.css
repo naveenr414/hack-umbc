@@ -1,0 +1,16 @@
+@charset:"utf-8";
+
+.district_map {
+    width:30%;
+    float:left;
+}
+
+.district_title {
+    float: right;
+}*/
+.district_content {
+    float: right;
+    display: box;
+    width: 70%;
+    border-left:1px solid black;
+}*/
