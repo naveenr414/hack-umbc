@@ -8,3 +8,9 @@ function initMap() {
   // The marker, positioned at Uluru
   var marker = new google.maps.Marker({position: center_us, map: map});
 }
+
+// trigger for modal
+document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.modal');
+    var instances = M.Modal.init(elems, options);
+  });
