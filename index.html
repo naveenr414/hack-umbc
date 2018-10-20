@@ -6,6 +6,14 @@
       <!--Import materialize.css-->
       <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
 
+      <style>
+         /* Set the size of the div element that contains the map */
+        #map {
+          height: 700px;  /* The height is 400 pixels */
+          width: 100%;  /* The width is the width of the web page */
+         }
+      </style>
+
       <!--Let browser know website is optimized for mobile-->
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </head>
@@ -13,10 +21,10 @@
     <body>
       <nav>
         <div class="nav-wrapper">
-          <a href="#" class="brand-logo">App</a>
+          <a href="#" class="brand-logo center">App</a>
         </div>
       </nav>
-      <nav>
+      <nav class="container">
         <div class="nav-wrapper">
           <form>
             <div class="input-field">
@@ -27,8 +35,13 @@
           </form>
         </div>
       </nav>
+      <div class="container" id="map"></div>
 
       <!--JavaScript at end of body for optimized loading-->
       <script type="text/javascript" src="js/materialize.min.js"></script>
+      <script type="text/javascript" src="js/app.js"></script>
+      <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCnn9Rd4-wFyh2XLLjzuADup0WOmz3_C78&callback=initMap">
+      </script>
     </body>
   </html>
