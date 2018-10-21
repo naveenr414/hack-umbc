@@ -27,4 +27,16 @@ var placesAutocomplete = places({
   container: document.querySelector('#address-input')
 });
 
+function getData(address){
+	var data = new FormData();
+	data.append("address",address);
+	var xhr = new XMLHttpRequest();
+	xhr.open("POST", "http://127.0.0.1:5000/address", true);
+	xhr.onload = function () {
+    // do something to response
+    alert(this.responseText);
+};
+	xhr.send(data);
+}
+
 places(placesAutocomplete);

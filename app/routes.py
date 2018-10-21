@@ -18,6 +18,12 @@ def index():
 @app.route('/address',methods=['GET', 'POST'])
 def address():
     args = request.args
-    state, district = apiscraper.findGeo(args["address"])
+    forms = request.form
+    address = ""
+    if("address" in args):
+        address = args["address"]
+    elif("address" in forms):
+        address = forms["address"]
+    state, district = apiscraper.findGeo(address)
     for x in find.query(state, district)[1]:
         return dumps(dict(x))
