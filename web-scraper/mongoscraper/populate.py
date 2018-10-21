@@ -15,4 +15,11 @@ def write(fileJSON):
     else:
         gov.insert_one(myDoc)
 
+def deletes():
+    for x in sen.find():
+        sen.delete_one(x)
+
+def prints():
+    for x in sen.find():
+        print(x)
 
