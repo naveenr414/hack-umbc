@@ -10,7 +10,7 @@
         src="https://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
-			
+
       <style>
         body, html {
           height: 100%;
@@ -71,9 +71,18 @@
       <script src="https://cdn.jsdelivr.net/npm/places.js@1.11.0"></script>
 			      <!--JavaScript at end of body for optimized loading-->
       <script>
-        var placesAutocomplete = places({
-          container: document.querySelector('#address-input')
-        });
+        (function() {
+            var placesAutocomplete = places({
+              container: document.querySelector('#address-input'),
+              countries: ["US"],
+              type: "address"
+            });
+
+            placesAutocomplete.on('change', function(e) {
+                var coords = e.suggestion.latlng;
+                getDataLong(coords.lat,coords.lng);
+            })
+        })();
       </script>
       <script async defer
         type="text/javascript"
