@@ -24,6 +24,10 @@ def address():
         address = args["address"]
     elif("address" in forms):
         address = forms["address"]
+    elif("lat" in forms and "lon" in forms):
+        address = apiscraper.reverseGeocode(forms["lat"],forms["lon"])
+    elif("lat" in args and "lon" in args):
+        address = apiscraper.reverseGeocode(forms["lat"],forms["lon"])
     state, district = apiscraper.findGeo(address)
     for x in find.query(state, district)[1]:
         return dumps(dict(x))

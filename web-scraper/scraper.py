@@ -2,13 +2,49 @@ from bs4 import BeautifulSoup
 import urllib.request as ur
 import json
 
-partyOneLetter = {"D":"Democrat","R":"Republican","I":"Independent"}
+partyOneLetter = {"D":"Democrat","R":"Republican","I":"Independent","L":"Libertarian"}
 writeMongo = True
 if(writeMongo):
     from mongoscraper import populate
 
+def findCandidateData(candidateName,candidateJson,infoLink = "http://www.ontheissues.org/Senate/"):
+    infoLink+=candidateName.replace(" ","_")+".htm"
+
+    works = True
+    
+    try:
+        ur.urlopen(infoLink)
+    except:
+        works = False
+
+    fields = range(1,21)
+    fields = list(map(lambda x: "position_"+str(x),fields))
+
+    for field in fields:
+        candidateJson[field] = "Unknown"
+
+    if(works):
+        candidateSoup = BeautifulSoup(ur.urlopen(infoLink),"html.parser")
+        tableList = candidateSoup.findAll("tr")
+
+        for row in tableList:
+            if(row.find("a")!=None and row.find("a").has_attr("name") and row.find("a")["name"][0]=="q"):
+                num = row.find("b").find("a")["name"][1:]      
+                stance = row.find("b").text.strip()+" the idea that "+row.findAll("a")[1].text
+                candidateJson["position_"+num] = stance
+    return candidateJson
+
 def getData():
     jsonList = []
+
+    governorSoup = BeautifulSoup(ur.urlopen("http://www.governing.com/governor-races-2018"),"html.parser")
+    races = governorSoup.findAll("div",{"class":"state"})
+    for race in races:
+        stateName = race.findAll("h3")[0].text.split("\t")[0].strip()
+        currentGovernor = race.findAll("em")[0].split(": ")[1].split(", ")[0]
+        print(currentGovernor)
+
+    # Senator
     
     electionWebsite = "https://www.electoral-vote.com/evp2018/Senate/senate_races.html"
     electionSoup = BeautifulSoup(ur.urlopen(electionWebsite),"html.parser")
@@ -45,34 +81,7 @@ def getData():
                 if(len(t)==3 and t[0]=="(" and t[2]==")"):
                     party = partyOneLetter[t[1]]
                     candidateJson["party"] = party
-
-
-            infoLink = "http://www.ontheissues.org/Senate/"
-            infoLink+=name.replace(" ","_")+".htm"
-
-            works = True
-            
-            try:
-                ur.urlopen(infoLink)
-            except:
-                works = False
-
-            fields = range(1,21)
-            fields = list(map(lambda x: "position_"+str(x),fields))
-
-            for field in fields:
-                candidateJson[field] = "Unknown"
-
-            if(works):
-                candidateSoup = BeautifulSoup(ur.urlopen(infoLink),"html.parser")
-                tableList = candidateSoup.findAll("tr")
-
-                for row in tableList:
-                    if(row.find("a")!=None and row.find("a").has_attr("name") and row.find("a")["name"][0]=="q"):
-                        num = row.find("b").find("a")["name"][1:]      
-                        stance = row.find("b").text.strip()+" the idea that "+row.findAll("a")[1].text
-                        candidateJson["position_"+num] = stance
-        
+            candidateJson = findCandidateData(name,candidateJson)
             candidateList.append(candidateJson)
 
         tempJson["candidates"] = candidateList
@@ -81,7 +90,8 @@ def getData():
             populate.write(tempJson)
         
         allJsons.append(tempJson)
-            
+
+
         
     return allJsons
 

@@ -39,4 +39,17 @@ function getData(address){
 	xhr.send(data);
 }
 
+function getDataLong(lat,lon){
+	var data = new FormData();
+	data.append("lat",lat);
+	data.append("lon",lon);
+	var xhr = new XMLHttpRequest();
+	xhr.open("POST", "http://127.0.0.1:5000/address", true);
+	xhr.onload = function () {
+    // do something to response
+    alert(this.responseText);
+};
+	xhr.send(data);
+}
+
 places(placesAutocomplete);
