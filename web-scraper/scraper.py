@@ -50,8 +50,6 @@ def getData():
             infoLink = "http://www.ontheissues.org/Senate/"
             infoLink+=name.replace(" ","_")+".htm"
 
-            print(infoLink)
-
             works = True
             
             try:
