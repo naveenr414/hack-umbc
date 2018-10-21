@@ -80,6 +80,8 @@
 
             placesAutocomplete.on('change', function(e) {
                 var coords = e.suggestion.latlng;
+                console.log(coords)
+                zoomIn(coords.lat, coords.lng);
                 getDataLong(coords.lat,coords.lng);
             })
         })();
