@@ -8,7 +8,7 @@ if(writeMongo):
     from mongoscraper import populate
 
 def findCandidateData(candidateName,candidateJson,infoLink = "http://www.ontheissues.org/Senate/"):
-    infoLink+=candidateName.replace(" ","_")+".htm"
+    infoLink+=candidateName.strip().replace(" ","_")+".htm"
 
     works = True
     
@@ -32,11 +32,24 @@ def findCandidateData(candidateName,candidateJson,infoLink = "http://www.ontheis
                 num = row.find("b").find("a")["name"][1:]      
                 stance = row.find("b").text.strip()+" the idea that "+row.findAll("a")[1].text
                 candidateJson["position_"+num] = stance
+    else:
+        if("Jealous" in candidateName):
+            print(infoLink)
     return candidateJson
 
 def getData():
     allJsons = []
 
+    #House Data
+    r = open("house.txt").read().split("\n")
+    i = 0
+    while(i<len(r)):
+        if(r[i] == "Voting history"):
+            location = r[i-3]
+            contestants = r[i-2]
+            print(location,contestants)
+    
+    #Governor Data
     governorSoup = BeautifulSoup(ur.urlopen("http://www.governing.com/governor-races-2018"),"html.parser")
     races = governorSoup.findAll("div",{"class":"state"})
     for race in races:
