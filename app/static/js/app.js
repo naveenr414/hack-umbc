@@ -1,5 +1,4 @@
 var map;
-var response;
 
 // Initialize and add the map
 function initMap() {
@@ -66,14 +65,13 @@ function getDataLong(lat,lon){
 	xhr.onload = function () {
     // do something to response
     //let a = this.responseText
-		alert(this.responseText);
-    return this.responseText;
+    parseReturnData(this.responseText);
     //alert(response);
   };
 	xhr.send(data);
 }
 
-function parseReturnData() {
+function parseReturnData(response) {
   //alert(response)
   var result = JSON.parse(response)
   console.log(result)
