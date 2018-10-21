@@ -1,5 +1,8 @@
 
 import requests, json
+import random
+import math
+
 API_KEY = "AIzaSyBTUP5PZWwTFM6PP2ok5pAKYdBOW6pFARw"
 
 def latLong(address):
@@ -36,17 +39,36 @@ def findGeo(address):
 def findGeoLat(lat,long):
     """ Finds the congressional district for a latitude/longitude """
 
-    addy = reverseGeocode(lat,long)
-    return findGeo(addy)
+    works = False
+    delta=.001
+    n = 0
+
+    while(not works):
+        addy = reverseGeocode(lat,long)
+        answer = ""
+        try:
+            answer = findGeo(addy)
+        except:
+            pass
+        if(answer != "" and addy!=""):
+            return answer
+        lat+=delta*random.randint(1,1)
+        long+=delta*random.randint(1,1)
+
+        delta*=math.e**(n/10)
+        n+=1
+    
 
 def reverseGeocode(lat,long):
     """ Return an address for a latitude longitude """
     
     baseURL = " https://maps.googleapis.com/maps/api/geocode/json"
-    payload = {"key":API_KEY,"latlng":str(lat)+","+str(long)}
+    payload = {"key":API_KEY,"latlng":str(lat)+","+str(long),"result_type":"street_address"}
     r = requests.get(baseURL,params = payload)
-
-    return r.json()["results"][0]["formatted_address"]
+    try:
+        return r.json()["results"][0]["formatted_address"]
+    except:
+        return ""
 
 district = findGeoLat(*latLong("7030 Preinkert Dr, College Park, MD 20742"))
 print(district)
