@@ -1,3 +1,4 @@
+
 import requests, json
 API_KEY = "AIzaSyBTUP5PZWwTFM6PP2ok5pAKYdBOW6pFARw"
 
@@ -11,7 +12,7 @@ def latLong(address):
     
     return (location["lat"],location["lng"])
 
-def findDistrict(address):
+def findGeo(address):
     """ Finds the congressional district for an address """
     baseURL = "https://www.googleapis.com/civicinfo/v2/voterinfo"
     payload = {"key":API_KEY,"address":address}
@@ -24,16 +25,19 @@ def findDistrict(address):
         houseElection = "office" in contest and contest["office"] == "U.S. Representative"
         if(houseElection):
             if("district" in contest and "name" in contest["district"]):
-                return contest["district"]["name"]
+                info = contest["district"]["name"]
+                state = info.split("'")[0]
+                districtName = info.split(" ")[1][:-2]
+
+                return state, districtName
     
     return "No District Found"
 
-def findDistrictLat(lat,long):
+def findGeoLat(lat,long):
     """ Finds the congressional district for a latitude/longitude """
 
     addy = reverseGeocode(lat,long)
-    print(addy)
-    return findDistrict(addy)
+    return findGeo(addy)
 
 def reverseGeocode(lat,long):
     """ Return an address for a latitude longitude """
@@ -44,6 +48,5 @@ def reverseGeocode(lat,long):
 
     return r.json()["results"][0]["formatted_address"]
 
-print(*latLong("7030 Preinkert Dr, College Park, MD 20742"))
-district = findDistrictLat(*latLong("7030 Preinkert Dr, College Park, MD 20742"))
+district = findGeoLat(*latLong("7030 Preinkert Dr, College Park, MD 20742"))
 print(district)
