@@ -82,7 +82,9 @@
                 var coords = e.suggestion.latlng;
                 console.log(coords)
                 zoomIn(coords.lat, coords.lng);
-                getDataLong(coords.lat,coords.lng);
+                response = getDataLong(coords.lat,coords.lng);
+                console.log(response);
+                parseReturnData(response);
             })
         })();
       </script>
