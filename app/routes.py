@@ -1,20 +1,3 @@
-Skip to content
- 
-Search or jump to…
-
-Pull requests
-Issues
-Marketplace
-Explore
- @naveenr414 Sign out
-3
-0 1 naveenr414/hack-umbc
- Code  Issues 0  Pull requests 0  Projects 0  Wiki  Insights  Settings
-hack-umbc/app/routes.py
-c54db94  3 hours ago
-@naveenr414 naveenr414 Added house and governor to the output from address
-      
-47 lines (38 sloc)  1.34 KB
 from app import app
 from flask import render_template, redirect, url_for, request,session, request, jsonify
 from .forms import AddressForm
