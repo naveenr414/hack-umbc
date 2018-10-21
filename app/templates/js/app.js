@@ -9,7 +9,7 @@ function initMap() {
                                         center: center_us,
                                         minZoom: 4.5
                                       });
-  var kmlSource = "kml/2012_US_Congressional_Districts.kml";
+  var kmlSource = 'https://github.com/naveenr414/hack-umbc/blob/master/app/templates/kml/2012_US_Congressional_Districts.kml';
 
   var kmlLayer = new google.maps.KmlLayer(kmlSource, {
     suppressInfoWindows: true,
@@ -17,7 +17,6 @@ function initMap() {
     map: map
   });
 }
-
 
 document.addEventListener('DOMContentLoaded', function() {
     var elems = document.querySelectorAll('.modal');
