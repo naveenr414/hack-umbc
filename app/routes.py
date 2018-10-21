@@ -29,5 +29,18 @@ def address():
     elif("lat" in args and "lon" in args):
         address = apiscraper.reverseGeocode(forms["lat"],forms["lon"])
     state, district = apiscraper.findGeo(address)
+    races = {}
+    races["house"] = []
+    races["senate"] = []
+    races["governor"] = []
+
+    for x in find.query(state, district)[0]:
+        races["house"].append(dict(x))
+
     for x in find.query(state, district)[1]:
-        return dumps(dict(x))
+        races["senate"].append(dict(x))
+
+    for x in find.query(state, district)[2]:
+        races["governor"].append(dict(x))
+
+    return dumps(dict(races))
