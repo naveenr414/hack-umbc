@@ -3,7 +3,7 @@ import urllib.request as ur
 import json
 
 partyOneLetter = {"D":"Democrat","R":"Republican","I":"Independent"}
-writeMongo = False
+writeMongo = True
 if(writeMongo):
     from mongoscraper import populate
 
@@ -87,3 +87,4 @@ def getData():
 
 
 c = getData()
+
