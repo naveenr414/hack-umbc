@@ -9,22 +9,24 @@ function initMap() {
                                         center: center_us,
                                         minZoom: 4.5
                                       });
-  var kmlSource = 'https://github.com/naveenr414/hack-umbc/blob/master/app/templates/kml/2012_US_Congressional_Districts.kml';
+  // var kmlSource = 'https://github.com/naveenr414/hack-umbc/blob/master/app/templates/kml/2012_US_Congressional_Districts.kml';
 
-  var kmlLayer = new google.maps.KmlLayer(kmlSource, {
-    suppressInfoWindows: true,
-    preserveViewport: false,
-    map: map
+  // var kmlLayer = new google.maps.KmlLayer(kmlSource, {
+  //   suppressInfoWindows: true,
+  //   preserveViewport: false,
+  //   map: map
+  // });
+
+  map.addListener("click", function (event) {
+      var latitude = event.latLng.lat();
+      var longitude = event.latLng.lng();
+      console.log( latitude + ', ' + longitude );
   });
 }
 
 document.addEventListener('DOMContentLoaded', function() {
   var elems = document.querySelectorAll('.modal');
   var instances = M.Modal.init(elems);
-});
-
-var placesAutocomplete = places({
-  container: document.querySelector('#address-input')
 });
 
 function getData(address){
@@ -38,5 +40,3 @@ function getData(address){
 };
 	xhr.send(data);
 }
-
-places(placesAutocomplete);
