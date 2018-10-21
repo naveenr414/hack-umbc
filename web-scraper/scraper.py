@@ -35,14 +35,54 @@ def findCandidateData(candidateName,candidateJson,infoLink = "http://www.ontheis
     return candidateJson
 
 def getData():
-    jsonList = []
+    allJsons = []
 
     governorSoup = BeautifulSoup(ur.urlopen("http://www.governing.com/governor-races-2018"),"html.parser")
     races = governorSoup.findAll("div",{"class":"state"})
     for race in races:
         stateName = race.findAll("h3")[0].text.split("\t")[0].strip()
-        currentGovernor = race.findAll("em")[0].split(": ")[1].split(", ")[0]
-        print(currentGovernor)
+        currentGovernor = race.findAll("em")[0].text.split(": ")[1].split(", ")[0]
+
+        tempJson = {}
+        tempJson["scope"] = "governor"
+        tempJson["state"] = stateName
+
+        nominees = race.findAll("div",{"class":"nominee"})
+        candidateList = []
+        for nominee in nominees:
+            candidateJson = {}
+            name = str(nominee.findAll("span",{"class":"cand-name"})[0]).split("<br/>")
+            tempName = ""
+            if("State" not in name[0] and "Rep." not in name[0] and "Gov." not in name[0] and "Mayor" not in name[0] and "School" not in name[0]):
+                tempName = name[0].split(">")[1] + " "
+
+            tempName+=name[1]
+            tempName = tempName.replace("Rep.","")
+            tempName = tempName.replace("County Executive","")
+            tempName = tempName.replace("Treasurer","")
+
+            party = nominee.findAll("small")[0].text.capitalize().split(" ")
+            if(party[0]!=""):
+                party = party[0]
+            else:
+                party = party[1]
+            party = party.capitalize()
+
+            incumbent = currentGovernor == tempName
+        
+            candidateJson["name"] = tempName
+            candidateJson["state"] = stateName
+            if(incumbent):
+                candidateJson["status"] = "incumbent"
+            else:
+                candidateJson["status"] = "challenger"
+            candidateJson["party"] = party
+            candidateJson = findCandidateData(tempName,candidateJson,infoLink="http://www.ontheissues.org/")
+            candidateList.append(candidateJson)
+        tempJson["candidates"] = candidateList
+        if(writeMongo):
+            populate.write(tempJson)
+        allJsons.append(tempJson)
 
     # Senator
     
@@ -52,7 +92,6 @@ def getData():
     states = list(map(lambda x: x.text.strip(),electionSoup.findAll("h2")))
     states = list(map(lambda x: x.split("-")[0],states))
 
-    allJsons = []
     races = electionSoup.findAll("table",{"summary":"candidate"})
     for raceNum,race in enumerate(races):
         tempJson = {}
