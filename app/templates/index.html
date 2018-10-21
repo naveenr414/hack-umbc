@@ -3,6 +3,8 @@
     <head>
       <!--Import Google Icon Font-->
       <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!-- Custom Fonts -->
+      <link href="https://fonts.googleapis.com/css?family=Monoton%7CUnica+One" rel="stylesheet">
       <!--Import materialize.css-->
       <link type="text/css" rel="stylesheet" href={{url_for('static', filename="css/materialize.min.css")}}  media="screen,projection"/>
       <link type="text/css" rel="stylesheet" href={{url_for('static', filename="css/layout.css")}}  media="screen,projection"/>
@@ -30,13 +32,13 @@
     <body>
       <nav>
         <div class="nav-wrapper grey darken-4">
-          <a href="#" class="brand-logo center">App</a>
+          <a href="#" class="brand-logo center"><span class="unica">general</span><span class="monoton">&ensp;E</span></a>
         </div>
       </nav>
       <nav>
-        <div class="nav-wrapper grey darken-4">
+        <div class="nav-wrapper grey darken-2">
           <form>
-            <div class="input-field">
+            <div class="input-field darken-1">
               <input id="address-input" type="search" placeholder="What is your address?" required>
               <label class="label-icon" for="search"><i class="material-icons">search</i></label>
               <i class="material-icons">close</i>
@@ -47,11 +49,20 @@
       <div id="map"></div>
 
       <!-- Modal Trigger -->
-      <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Modal</a>
+      <a id="candidateButton"class="waves-effect waves-light btn modal-trigger" href="#modal1">Find my candidates!</a>
 
-      {% from "macros.html" import render_modal %}
+      <div id="modal1" class="modal modal-fixed-footer" role="dialogue">
+        <div class="modal-content">
+        </div>
+        <div class="modal-footer">
+          <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
+        </div>
+      </div>
 
-      {{render_modal()}}
+
+      <!-- {% from "macros.html" import render_modal %}
+
+      {{render_modal()}} -->
 
       <!-- Modal Structure 
       <div id="modal1" class="modal modal-fixed-footer">

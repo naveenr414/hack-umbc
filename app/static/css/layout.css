@@ -14,4 +14,14 @@ body {
     padding: 5px;
 }
 
+.unica {
+   font-family: 'Unica One', cursive;
+}
+.monoton {
+   color:teal;
+   font-family: 'Monoton', cursive;
+}
 
+a#CandidateButton {
+   margins:auto;
+}
