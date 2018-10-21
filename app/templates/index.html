@@ -7,9 +7,13 @@
       <link type="text/css" rel="stylesheet" href={{url_for('static', filename="css/materialize.min.css")}}  media="screen,projection"/>
 
       <style>
-         /* Set the size of the div element that contains the map */
+        body, html {
+          height: 100%;
+          width: 100%;
+        }
+        /* Set the size of the div element that contains the map */
         #map {
-          height: 700px;  /* The height is 400 pixels */
+          height: 100%;  /* The height is 400 pixels */
           width: 100%;  /* The width is the width of the web page */
          }
       </style>
