@@ -34,7 +34,7 @@
         <div class="nav-wrapper">
           <form>
             <div class="input-field">
-              <input id="search" type="search" required>
+              <input id="address-input" type="search" placeholder="What is your address?" required>
               <label class="label-icon" for="search"><i class="material-icons">search</i></label>
               <i class="material-icons">close</i>
             </div>
@@ -46,7 +46,11 @@
       <!-- Modal Trigger -->
       <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Modal</a>
 
-      <!-- Modal Structure -->
+      {% from "macros.html" import render_modal %}
+
+      {{render_modal()}}
+
+      <!-- Modal Structure 
       <div id="modal1" class="modal modal-fixed-footer">
         <div class="modal-content">
           {% for i in range(11) %}
@@ -57,11 +61,17 @@
           <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
         </div>
       </div>
-
+      -->
 
       <script type="text/javascript" src={{url_for('static', filename='js/materialize.min.js')}}></script>
       <script type="text/javascript" src={{url_for('static', filename='js/app.js')}}></script>
+      <script src="https://cdn.jsdelivr.net/npm/places.js@1.11.0"></script>
 			      <!--JavaScript at end of body for optimized loading-->
+      <script>
+        var placesAutocomplete = places({
+          container: document.querySelector('#address-input')
+        });
+      </script>
       <script async defer
         type="text/javascript"
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCnn9Rd4-wFyh2XLLjzuADup0WOmz3_C78&callback=initMap">

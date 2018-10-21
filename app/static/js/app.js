@@ -19,6 +19,12 @@ function initMap() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('.modal');
-    var instances = M.Modal.init(elems);
-  });
+  var elems = document.querySelectorAll('.modal');
+  var instances = M.Modal.init(elems);
+});
+
+var placesAutocomplete = places({
+  container: document.querySelector('#address-input')
+});
+
+places(placesAutocomplete);
