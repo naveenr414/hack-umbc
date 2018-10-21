@@ -52,8 +52,8 @@ def findGeoLat(lat,long):
             pass
         if(answer != "" and addy!=""):
             return answer
-        lat+=delta*random.randint(1,1)
-        long+=delta*random.randint(1,1)
+        lat+=delta*random.randint(-1,1)
+        long+=delta*random.randint(-1,1)
 
         delta*=math.e**(n/10)
         n+=1

@@ -66,6 +66,7 @@ function getDataLong(lat,lon){
 	xhr.onload = function () {
     // do something to response
     //let a = this.responseText
+		alert(this.responseText);
     return this.responseText;
     //alert(response);
   };
