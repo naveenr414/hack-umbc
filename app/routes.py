@@ -1,10 +1,8 @@
 from app import app
-from flask import render_template, redirect, url_for, request,session, request, jsonify
+from flask import render_template, redirect, url_for, request,session, request, 
 from .forms import AddressForm
 from . import apiscraper
-from app.mongoscraper import find
-import json
-from bson.json_util import dumps
+from mongoscraper import find
 
 """ This file says how to render each page """
 
@@ -18,6 +16,5 @@ def index():
 @app.route('/address',methods=['GET', 'POST'])
 def address():
     args = request.args
-    state, district = apiscraper.findGeo(args["address"])
-    for x in find.query(state, district)[1]:
-        return dumps(dict(x))
+    state, district = findState(args["address"]), findDistrict(address)
+    return jsonify(find.query(state,district)[0])
