@@ -16,7 +16,7 @@ def write(fileJSON):
         gov.insert_one(myDoc)
 
 def deletes():
-    for x in sen.find():
+    for x in hor.find():
         sen.delete_one(x)
 
 def prints():

@@ -45,6 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
   var instances = M.Modal.init(elems);
 });
 
+/*
 function getData(address){
 	var data = new FormData();
 	data.append("address",address);
@@ -54,7 +55,7 @@ function getData(address){
     // do something to response
 };
 	xhr.send(data);
-}
+}*/
 
 function getDataLong(lat,lon){
 	var data = new FormData();
@@ -72,16 +73,56 @@ function getDataLong(lat,lon){
 }
 
 function parseReturnData(response) {
-  //alert(response)
+	response = JSON.parse(response);
+	var html = "";
+	var stateName = ""
+	var things = [response.senate,response.house,response.governor];
+	var names = ["Senate","House","Governor"];
+	
+	if(response.district == ""){
+		response.district = "1";
+	}
+	
+	html+="<h4>"+ response.state +" District "+response.district+" </h4>";
+	
+	for(var j = 0;j<3;j++){
+		if(things[j].length!=0){
+			for(var i = 0;i<things[j][0].candidates.length;i++){
+				if(i == 0){
+					html+="<b> "+names[j]+" </b> <ul>";
+				}
+				
+				html+="<li> <em>";
+			
+				
+				html+=String(things[j][0].candidates[i].name) + "</em> ("+things[j][0].candidates[i].party+") </li> &emsp;- "+things[j][0].candidates[i].position_1; 
+
+			}
+			
+			html+="</ul>";
+		}
+	}
+	
+	if(html===""){
+		html = "No information found";
+	}
+		
+	$(".modal-content").html(html);
+	
+	
+	/*
   var result = JSON.parse(response)
   var senate_info = result['senate'][0]
   var governor_info = result['governor'][0]
   var house_info = result['house'][0]
-  $("#render_modal").trigger("click")
   var senate_cand1 = senate_info['candidates'][0];
   var senate_cand2 = senate_info['candidates'][1];
   var governor_cand1 = governor_info['candidates'][0];
   var governor_cand2 = governor_info['candidates'][1];
+	var html = "<h4>" + senate_info['state'] + "</h4>";
+	*/
+	
+		/*
   $(".modal-content").html("<h4>" + senate_info['state'] + "</h4>" +
                            "<b>Senate</b> " + "<br><ul><li><em>" + senate_cand1['name'] + "</em> (" + senate_cand1['party'] + ") </li>"
                                                                      + "&emsp;- " + senate_cand1['position_1']
@@ -91,7 +132,9 @@ function parseReturnData(response) {
                                                                      + "&emsp;- " + governor_cand1['position_1']
                                                                      + "<li><em>" + governor_cand2['name'] + "</em> (" + governor_cand2['party'] + ") </li>"
                                                                      + "&emsp;- " + governor_cand2['position_1'] + "</ul>");
-}
+	*/
+	
+																																		 }
 
 // function searchAddress(ele) {
 //   if(event.key === 'Enter') {

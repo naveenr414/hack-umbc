@@ -7,8 +7,8 @@ sen = mydb["Senator"]
 gov = mydb["Governor"]
 
 def query(state, district):
-    x = { "state" : state }
-    y = { "state" : state + district }
-    z = [hor.find(y), sen.find(x), gov.find(x)]
+    x = { "state" : state+"_"+district }
+    y = { "state" : state }
+    z = [hor.find(x), sen.find(y), gov.find(y)]
     return z
 

@@ -14,31 +14,37 @@ for i in range(len(currentMembers)):
 def findCandidateData(candidateName,candidateJson,infoLink = "http://www.ontheissues.org/Senate/"):
     infoLink+=candidateName.strip().replace(" ","_")+".htm"
 
+    possibleInfoLinks = ["http://www.ontheissues.org/Senate/","http://www.ontheissues.org/House/","http://www.ontheissues.org/"]
+
+    for i in range(len(possibleInfoLinks)):
+        possibleInfoLinks[i]+=candidateName.strip().replace(" ","_")+".htm"
+
     works = True
-    
-    try:
-        ur.urlopen(infoLink)
-    except:
-        works = False
 
-    fields = range(1,21)
-    fields = list(map(lambda x: "position_"+str(x),fields))
+    for infoLink in possibleInfoLinks:  
+        try:
+            ur.urlopen(infoLink)
+        except:
+            works = False
 
-    for field in fields:
-        candidateJson[field] = "Unknown"
+        fields = range(1,21)
+        fields = list(map(lambda x: "position_"+str(x),fields))
 
-    if(works):
-        candidateSoup = BeautifulSoup(ur.urlopen(infoLink),"html.parser")
-        tableList = candidateSoup.findAll("tr")
+        for field in fields:
+            candidateJson[field] = "Unknown"
 
-        for row in tableList:
-            if(row.find("a")!=None and row.find("a").has_attr("name") and row.find("a")["name"][0]=="q"):
-                num = row.find("b").find("a")["name"][1:]      
-                stance = row.find("b").text.strip()+" the idea that "+row.findAll("a")[1].text
-                candidateJson["position_"+num] = stance
-    else:
-        if("Jealous" in candidateName):
-            print(infoLink)
+        if(works):
+            candidateSoup = BeautifulSoup(ur.urlopen(infoLink),"html.parser")
+            tableList = candidateSoup.findAll("tr")
+
+            for row in tableList:
+                if(row.find("a")!=None and row.find("a").has_attr("name") and row.find("a")["name"][0]=="q"):
+                    num = row.find("b").find("a")["name"][1:]      
+                    stance = row.find("b").text.strip()+" the idea that "+row.findAll("a")[1].text
+                    candidateJson["position_"+num] = stance
+
+            return candidateJson
+        
     return candidateJson
 
 def getData():
@@ -48,52 +54,69 @@ def getData():
     r = open("house.txt",encoding="utf-8").read().split("\n")
     i = 0
     while(i<len(r)):
-        if(r[i] == "Voting history"):
-            location = r[i-3]
+        if(r[i] == ''):
+            del r[i]
+        else:
+            i+=1
+    
+    i = 0
+    while(i<len(r)):
+        if(r[i].strip() == "Voting history"):
+            location = r[i-2]
 
-            contestants = r[i-2]
+            contestants = r[i-1]
             candidateList = []
+            print(r[i-1])
             if("SOLID" not in contestants):
                 tempJson = {}
                 tempJson["scope"] = "hor"
 
-                state = location.split(", ")[0]
-                district = location.split("District ")[1].split(" ")[0]
-                if("large" in district.lower()):
-                    district = "1"
+                state,district = "",""
+
+                existContestant = True
+                if("District" not in contestants):
+                    state = location.split(", ")[0]
+                    district = location.split("District ")[1].split(" ")[0]
+                    if("large" in district.lower()):
+                        district = "1"
+                    else:
+                        district = str(int(district))
                 else:
-                    district = str(int(district))
+                    state = contestants.split(", ")[0]
+                    district = contestants.strip()[-2:]
 
-                print(contestants.strip().split(")"))
+                    print(state,district)
+                    existContestant = False
 
-                contestantOne = contestants.split(" (")[0]
-                contestantOneParty = partyOneLetter[contestants.split(" (")[1][0]]
-                contestantTwo = contestants.split("vs. ")[1].split(" (")[0]
-                contestantTwoParty = partyOneLetter[contestants.strip().split(")")[-2][-1]]
-                tempJson["state"] = state
+                if(existContestant):
+                    contestantOne = contestants.split(" (")[0]
+                    contestantOneParty = partyOneLetter[contestants.split(" (")[1][0]]
+                    contestantTwo = contestants.split("vs. ")[1].split(" (")[0]
+                    contestantTwoParty = partyOneLetter[contestants.strip().split(")")[-2][-1]]
+                    tempJson["state"] = state+"_"+str(district)
 
-                candidateList = []
-                candidateOneJson = {}
-                candidateOneJson["name"] = contestantOne
-                candidateOneJson["party"] = contestantOneParty
-                candidateOneJson = findCandidateData(contestantOne,candidateOneJson,infoLink="http://www.ontheissues.org/")
-                candidateTwoJson = {}
-                candidateTwoJson["name"] = contestantTwo
-                candidateTwoJson["party"] = contestantTwoParty
-                candidateTwoJson = findCandidateData(contestantTwo,candidateTwoJson,infoLink="http://www.ontheissues.org/")
+                    candidateList = []
+                    candidateOneJson = {}
+                    candidateOneJson["name"] = contestantOne
+                    candidateOneJson["party"] = contestantOneParty
+                    candidateOneJson = findCandidateData(contestantOne,candidateOneJson,infoLink="http://www.ontheissues.org/")
+                    candidateTwoJson = {}
+                    candidateTwoJson["name"] = contestantTwo
+                    candidateTwoJson["party"] = contestantTwoParty
+                    candidateTwoJson = findCandidateData(contestantTwo,candidateTwoJson,infoLink="http://www.ontheissues.org/")
 
-                if(contestantOne in currentMembers):
-                    candidateOneJson["status"] = "incumbent"
-                else:
-                    candidateOneJson["status"] = "challenger"
+                    if(contestantOne in currentMembers):
+                        candidateOneJson["status"] = "incumbent"
+                    else:
+                        candidateOneJson["status"] = "challenger"
 
-                if(contestantTwo in currentMembers):
-                    candidateTwoJson["status"] = "incumbent"
-                else:
-                    candidateTwoJson["status"] = "challenger"
+                    if(contestantTwo in currentMembers):
+                        candidateTwoJson["status"] = "incumbent"
+                    else:
+                        candidateTwoJson["status"] = "challenger"
 
-                candidateList = [candidateOneJson,candidateTwoJson]
-                tempJson["candidates"] = candidateList
+                    candidateList = [candidateOneJson,candidateTwoJson]
+                    tempJson["candidates"] = candidateList
 
 
 
