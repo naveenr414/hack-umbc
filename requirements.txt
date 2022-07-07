@@ -7,7 +7,7 @@ html5lib==0.999999
 Jinja2==2.10
 pymongo==3.7.2
 pyvis==0.1.4.1
-requests==2.1.0
+requests==2.20.0
 requests-toolbelt==0.8.0
 urllib3==1.23
 virtualenv==16.0.0
